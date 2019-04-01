@@ -56,9 +56,28 @@ ELLENORZO_PONT *readFile(char *fileName){
     return EP;
 }
 
+int _getBirsag(int megengedett, int ment, int kat){
+    int i;
+    int seb =  ment - megengedett;
+    if(seb < 0) return 0;
+    for(i = 0; tullepes[kat][i] < seb; i++);
+    return tullepesbirsag[i-1];
+}
 
-int getSebBirsag(int hatar, int ment){
+int getSebBirsag(int megengedett, int ment){
+    if(megengedett <= 50) _getBirsag(megengedett, ment, 0);
+    else if( megengedett <= 100) _getBirsag(megengedett, ment, 1);
+    else return  _getBirsag(megengedett, ment, 2);
+}
 
+int getBirsag(REKORD *r, int megengedett){
+    if(strcmp(r->tipus, sertesek[0]) == 0)
+        return getSebBirsag(megengedett, r->sebesseg);
+
+    int i;
+    for(i = 1; i < 7; i++)
+        if(strcmp(r->tipus, sertesek[i]) == 0)
+            return birsagok[i];
 
     return 0;
 }
@@ -69,6 +88,7 @@ void stat(ELLENORZO_PONT **data){
     for(i = 0; data[i]; i++){
         for(j = 0; data[i]->rekordok[j]; j++){
             darab++;
+            osszeg += getBirsag(data[i]->rekordok[j], data[i]->megengedett);
         }
     }
     printf("A honap soran %d birsag kerult kiszabasra, osszesen %d forint ertekben.\n", darab, osszeg);
@@ -77,6 +97,11 @@ void stat(ELLENORZO_PONT **data){
 
 int main(int argc, char **argv)
 {
+
+    //printf("|%d|", tullepes[0][0] );
+
+
+
     ELLENORZO_PONT *pontok[argc];
     int i,j,k;
     for(i = 0; i < argc-1; i++){
