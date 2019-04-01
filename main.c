@@ -24,7 +24,6 @@ REKORD *parser(char *s){
 }
 
 REKORD **getRecords(int i, FILE *fp){
-
     REKORD **tomb = NULL;
     char sor[100];
 
@@ -99,7 +98,6 @@ int main(int argc, char **argv)
 {
 
     //printf("|%d|", tullepes[0][0] );
-
 
 
     ELLENORZO_PONT *pontok[argc];
